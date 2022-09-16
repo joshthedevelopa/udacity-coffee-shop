@@ -10,7 +10,7 @@ database_path = "sqlite:///{}".format(os.path.join(project_dir, database_filenam
 db = SQLAlchemy()
 
 '''
-setup_db(app)
+    setup_db(app)
     binds a flask application and a SQLAlchemy service
 '''
 
@@ -64,8 +64,12 @@ class Drink(db.Model):
     '''
 
     def short(self):
-        print(json.loads(self.recipe))
-        short_recipe = [{'color': r['color'], 'parts': r['parts']} for r in json.loads(self.recipe)]
+        recipe = json.loads(self.recipe)
+
+        if type(recipe) is not list:
+            recipe = [recipe]
+
+        short_recipe = [{'color': r['color'], 'parts': r['parts']} for r in recipe]
         return {
             'id': self.id,
             'title': self.title,
@@ -78,10 +82,15 @@ class Drink(db.Model):
     '''
 
     def long(self):
+        recipe = json.loads(self.recipe)
+
+        if type(recipe) is not list:
+            recipe = [recipe]
+
         return {
             'id': self.id,
             'title': self.title,
-            'recipe': json.loads(self.recipe)
+            'recipe': recipe
         }
 
     '''
